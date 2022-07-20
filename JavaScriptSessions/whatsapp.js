@@ -9,13 +9,7 @@ let conversation1 = {
             sender: '+91 99999 11111',
             timeStamp: '19th July 2022, 16:00',
             status: 1 // 1 -> sent, 2 -> delivered, 3 -> seen
-        },
-        {
-            text: 'Hi, How are you',
-            sender: '+91 99999 22222',
-            timeStamp: '19th July 2022, 16:10',
-            status: 3 // 1 -> sent, 2 -> delivered, 3 -> seen
-        },
+        }
 
     ]
 }
@@ -36,6 +30,12 @@ let conversation2 = {
             timeStamp: '20th July 2022, 12:15',
             status: 1 // 1 -> sent, 2 -> delivered, 3 -> seen
         },
+        {
+            text: 'Aur Bhai. Kya hall ?',
+            sender: '+91 99999 11111',
+            timeStamp: '19th July 2022, 16:00',
+            status: 2 // 1 -> sent, 2 -> delivered, 3 -> seen
+        }
 
     ]
 }
@@ -113,6 +113,18 @@ function sortMessagebasedOnLength(){
     console.table(messages);
 
     // Implement Buble Sort
+        let n = messages.length;
+        for(let i=0;i<n;i++){
+            for(let j=0; j<n-i-1; j++){
+                if(messages[j].length > messages[j+1].length){
+                    let temp = messages[j];
+                    messages[j] = messages[j+1];
+                    messages[j+1] = temp;
+                }
+            }
+        }
+
+        console.table(messages);
 }
 
 
