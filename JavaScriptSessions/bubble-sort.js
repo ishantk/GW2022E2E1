@@ -10,11 +10,11 @@ function sortNumbers(numbers){
         // when i:3, j -> 0
         // whne i:4, j X
         for(let j=0; j<n-i-1; j++){
-            if(numbers[j] > numbers[j+1]){
+            //if(numbers[j] > numbers[j+1]){
                 let temp = numbers[j];
                 numbers[j] = numbers[j+1];
                 numbers[j+1] = temp;
-            }
+            //}
         }
     }
 
