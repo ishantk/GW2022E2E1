@@ -1,11 +1,14 @@
-import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
+import { StatusBar } from "expo-status-bar";
+import { Component, useState } from "react";
 import { Button, StyleSheet, Text, View } from 'react-native';
 
-// Functional Component
-export default function App() {
-
-  const quotes = [
+// App is Child Class
+// Component is Parent Class
+export default class App extends Component{
+ 
+  // Attrbutes: Property of Object
+  idx = 0;
+  quotes = [
     "Be Exceptional",
     "Search the Candle rather than cursing the darkness",
     "Work hard, Be Successful",
@@ -13,37 +16,43 @@ export default function App() {
     "Work with joy and fill in joy"
   ];
 
-  let [idx, setIndex] = useState(0);
-  //let [message, setMessage] = useState("MyWhatsApp")
-  //var i = idx; // initially i is 0 because idx is 0
-
-  console.log("Idx is: "+idx);
-
-  if(idx == quotes.length-1){
-    idx = 0;
+  state = {
+    quote: this.quotes[this.idx]
   }
 
-  if(idx < 0){
-    idx = quotes.length-1;
+  onButtonPressed = () => {
+   
+    this.idx++;
+
+    if(this.idx == this.quotes.length-1){
+      this.idx = 0;
+    }
+
+    if(this.idx < 0){
+      this.idx = this.quotes.length-1;
+    }
+    
+    // Refresh the UI with new Value of quote
+    this.setState(
+      {
+        quote: this.quotes[this.idx]
+      }
+    );
   }
 
-  return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <Text style={styles.textStyle} >{quotes[idx]}</Text>
-      <Button title='NEXT QUOTE' onPress={(event) => setIndex(++idx)}></Button>
-      <Button title='PREVIOUS QUOTE' onPress={(event) => setIndex(--idx)}></Button>
-    </View>
-  );
+  render(){
+    return (
+      <View style={styles.container}>
+        <StatusBar style="auto" />
+        <Text style={styles.textStyle} >Welcome to Class Component</Text>
+        <Text>{this.state.quote}</Text>
+        <Button title='NEXT' onPress={this.onButtonPressed}></Button>
+      </View>
+    );
+  }
 
-  /*return (
-    <View style={styles.container}>
-      <Text style={styles.textStyle}>Welcome to React Native with Expo</Text>
-      <Text>This is Awesome</Text>
-      <StatusBar style="auto" />
-    </View>
-  );*/
 }
+
 
 const styles = StyleSheet.create({
   container: {
