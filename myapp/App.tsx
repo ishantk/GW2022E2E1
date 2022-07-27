@@ -1,49 +1,13 @@
 import { StatusBar } from "expo-status-bar";
-import { FlatList, StyleSheet, Text, View } from 'react-native';
-
-const flights = [
-  {
-    name: "SpiceJet",
-    from: "Delhi",
-    to: "Bangalore",
-    duration: 2.5,
-    fare: 4700
-  },
-  {
-    name: "GoFirst",
-    from: "Delhi",
-    to: "Bangalore",
-    duration: 3.5,
-    fare: 3200
-  },
-  {
-    name: "Indigo",
-    from: "Delhi",
-    to: "Bangalore",
-    duration: 1.5,
-    fare: 7500
-  },
-  {
-    name: "Vistara",
-    from: "Delhi",
-    to: "Goa",
-    duration: 4.5,
-    fare: 6900
-  },
-  {
-    name: "Air India",
-    from: "Delhi",
-    to: "Chennai",
-    duration: 1.5,
-    fare: 8450
-  }
-];
+import { useEffect, useState } from "react";
+import { FlatList, StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native';
 
 // List Item Layout
 const Item = (itemData:any) => (
   <View style={styles.item}>
-     <Text style={styles.title} >{itemData.name}</Text>
-     <Text style={styles.subTitle} >{itemData.fare}</Text>
+     <Image source={{uri: itemData.urlToImage}} style={styles.image}/>
+     <Text style={styles.title} >{itemData.title}</Text>
+     <Text style={styles.subTitle} >{itemData.publishedAt}</Text>
   </View>
 );
 
@@ -53,10 +17,49 @@ const renderItem = ({item}:any) => Item(item);
 // Functional Component
 export default function App() {
 
+  const url = "https://newsapi.org/v2/top-headlines?country=in&apiKey=31c21508fad64116acd229c10ac11e84";
+  const [news, setNews] = useState([]);
+  const [showIndicator, setIndicator] = useState(true);
+
+  const getNewsFromNewsAPI = async () =>{
+    try{  
+
+      const resposneFromAPI = await fetch(url);
+      console.log("resposneFromAPI");
+      console.log(resposneFromAPI);
+
+      // Convert the Raw Response into JSON
+      const jsonData = await resposneFromAPI.json();
+      console.log("jsonData");
+      console.log(jsonData);
+      
+      const articles = jsonData['articles'];
+      console.log("articles");
+      console.log(articles);
+      
+      setNews(articles);
+      setIndicator(false);
+
+    }catch(error){
+      console.error("Something Went Wrong: "+error);
+    }
+  }
+
+  useEffect(()=> {
+    getNewsFromNewsAPI();
+  }, []);
+
   return (
     <View style={styles.background}>
       <StatusBar style="auto" />
-      <FlatList data={flights} renderItem={renderItem}/>
+      
+      {
+        showIndicator ? <ActivityIndicator/> 
+        : <FlatList data={news} renderItem={renderItem}/> 
+      }
+      
+      
+      
     </View>
   );
 
@@ -90,12 +93,18 @@ const styles = StyleSheet.create({
 
   title: {
     fontSize: 16,
-    color: '#f00'
+    color: '#3f8'
   },
 
   subTitle: {
     fontSize: 12,
     color: '#f23'
+  },
+
+  image: {
+    width: 300,
+    height: 200,
+    margin: 8
   }
 
 });
