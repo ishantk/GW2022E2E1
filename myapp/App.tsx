@@ -1,68 +1,57 @@
-import { StatusBar } from "expo-status-bar";
-import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View, Image, ActivityIndicator } from 'react-native';
+import React from 'react';
+import { StyleSheet, Text, View, Dimensions, Button } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-// List Item Layout
-const Item = (itemData:any) => (
-  <View style={styles.item}>
-     <Image source={{uri: itemData.urlToImage}} style={styles.image}/>
-     <Text style={styles.title} >{itemData.title}</Text>
-     <Text style={styles.subTitle} >{itemData.publishedAt}</Text>
-  </View>
-);
+// Install: 
+// npm install @react-navigation/native
+// npm install @react-navigation/native-stack
+// npm install react-native-screens react-native-safe-area-context
 
-// Specified to execute renderItem function and create Item Views
-const renderItem = ({item}:any) => Item(item);
-
-// Functional Component
-export default function App() {
-
-  const url = "https://newsapi.org/v2/top-headlines?country=in&apiKey=31c21508fad64116acd229c10ac11e84";
-  const [news, setNews] = useState([]);
-  const [showIndicator, setIndicator] = useState(true);
-
-  const getNewsFromNewsAPI = async () =>{
-    try{  
-
-      const resposneFromAPI = await fetch(url);
-      console.log("resposneFromAPI");
-      console.log(resposneFromAPI);
-
-      // Convert the Raw Response into JSON
-      const jsonData = await resposneFromAPI.json();
-      console.log("jsonData");
-      console.log(jsonData);
-      
-      const articles = jsonData['articles'];
-      console.log("articles");
-      console.log(articles);
-      
-      setNews(articles);
-      setIndicator(false);
-
-    }catch(error){
-      console.error("Something Went Wrong: "+error);
-    }
-  }
-
-  useEffect(()=> {
-    getNewsFromNewsAPI();
-  }, []);
+function HomeScreen({navigation}:any) {
 
   return (
-    <View style={styles.background}>
-      <StatusBar style="auto" />
-      
-      {
-        showIndicator ? <ActivityIndicator/> 
-        : <FlatList data={news} renderItem={renderItem}/> 
-      }
-      
-      
-      
+    <View style={styles.container}>
+      <Text>This is Home Screen</Text>
+      <Button title='Go To Profile'
+      onPress={()=>navigation.navigate("Profile")}
+      />
     </View>
   );
+}
 
+function ProfileScreen() {
+
+  return (
+    <View style={styles.container}>
+      <Text>This is Profile</Text>
+    </View>
+  );
+}
+
+function OrdersScreen() {
+
+  return (
+    <View style={styles.container}>
+      <Text>This is My Orders Screen</Text>
+    </View>
+  );
+}
+
+// Create the Object of Stack
+const Stack = createNativeStackNavigator();
+
+export default function App() {
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='Home'>
+        <Stack.Screen name='Home' component={HomeScreen}/>
+        <Stack.Screen name='Profile' component={ProfileScreen}/>
+        <Stack.Screen name='Orders' component={OrdersScreen}/>
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -72,39 +61,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-
-  textStyle:{
-    fontSize: 24,
-    color: "#f00",
-    marginBottom: 20
-  },
-
-  background:{
-    backgroundColor: '#eff',
-    fontSize: 24,
-    marginBottom: 20
-  },
-
-  item: {
-    backgroundColor: '#fff',
-    padding: 8,
-    margin: 6
-  },
-
-  title: {
-    fontSize: 16,
-    color: '#3f8'
-  },
-
-  subTitle: {
-    fontSize: 12,
-    color: '#f23'
-  },
-
-  image: {
-    width: 300,
-    height: 200,
-    margin: 8
-  }
-
 });
