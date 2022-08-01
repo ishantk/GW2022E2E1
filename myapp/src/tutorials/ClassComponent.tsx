@@ -1,10 +1,11 @@
+import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { Component, useState } from "react";
 import { Button, StyleSheet, Text, View } from 'react-native';
 
 // App is Child Class
 // Component is Parent Class
-export default class App extends Component{
+export default class ClassComponent extends Component{
  
   // Attrbutes: Property of Object
   idx = 0;
@@ -52,7 +53,6 @@ export default class App extends Component{
   }
 
 }
-
 
 const styles = StyleSheet.create({
   container: {

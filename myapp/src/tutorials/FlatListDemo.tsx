@@ -51,7 +51,7 @@ const Item = (itemData:any) => (
 const renderItem = ({item}:any) => Item(item);
 
 // Functional Component
-export default function App() {
+export default function FlatListDemo() {
 
   return (
     <View style={styles.background}>

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
 // Functional Component
-export default function App() {
+export default function FunctionalComponent() {
 
   const quotes = [
     "Be Exceptional",

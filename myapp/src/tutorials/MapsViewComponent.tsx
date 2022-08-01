@@ -2,7 +2,7 @@ import React from 'react';
 import MapView, { Marker } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
 
-export default function App() {
+export default function MapsViewComponent() {
 
   // 30.9024075,75.8201689
 

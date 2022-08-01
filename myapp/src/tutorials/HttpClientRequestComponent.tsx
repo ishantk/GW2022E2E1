@@ -15,7 +15,7 @@ const Item = (itemData:any) => (
 const renderItem = ({item}:any) => Item(item);
 
 // Functional Component
-export default function App() {
+export default function HttpClientRequestComponent() {
 
   const url = "https://newsapi.org/v2/top-headlines?country=in&apiKey=31c21508fad64116acd229c10ac11e84";
   const [news, setNews] = useState([]);
