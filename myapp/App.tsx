@@ -14,6 +14,8 @@ import HttpClientRequestComponent from './src/tutorials/HttpClientRequestCompone
 import FlatListDemo from './src/tutorials/FlatListDemo';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import ClassComponent from './src/tutorials/ClassComponent';
+import SignInScreen from './src/screens/SignInScreen';
+import RegisterScreen from './src/screens/RegisterScreen';
 
 // Install: 
 
@@ -63,17 +65,25 @@ const Tab = createMaterialTopTabNavigator();
   );
 }*/
 
-export default function App() {
+/*export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="FlatListDemo" component={FlatListDemo} />
-        {/* <Tab.Screen name="News" component={HttpClientRequestComponent} /> */}
         <Tab.Screen name="ProfileScreen" component={ProfileScreen} />
         <Tab.Screen name="OrdersScreen" component={OrdersScreen} />
         <Tab.Screen name="ClassComponent" component={ClassComponent} />
       </Tab.Navigator>
+    </NavigationContainer>
+  );
+}*/
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName='SignInScreen'>
+        <Stack.Screen name='SignInScreen' component={SignInScreen}/>
+        <Stack.Screen name='RegisterScreen' component={RegisterScreen}/>
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
