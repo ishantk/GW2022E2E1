@@ -1,10 +1,38 @@
 import React, { useState } from 'react';
 import { Button, StyleSheet, TextInput, View, Text, TouchableOpacity } from'react-native';
+import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore"; 
 
 export default function RegisterScreen({navigation}: any) {
 
+  // Refer Documentation -> https://firebase.google.com/docs/auth/web/start
   function register(){
     console.log("Register.....");
+    console.log("Name: "+name+" Email: "+email+" Password: "+password);
+    
+    const auth = getAuth();
+    const db = getFirestore();
+    
+    createUserWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      console.log("User Registered....");
+
+      const docToInsert = {
+        name: name,
+        email: email,
+        password: password
+      }
+
+      setDoc(doc(db, "users", user.uid), docToInsert);
+
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("Error Occurred...."+errorCode+" "+errorMessage);
+    });
   }
 
   function navigateToLoginScreen(){
@@ -23,8 +51,8 @@ export default function RegisterScreen({navigation}: any) {
 
         <TextInput style={styles.input}
             placeholder='Full Name'
-            value={email}
-            onChangeText={setEmail}
+            value={name}
+            onChangeText={setName}
         />
 
         <TextInput style={styles.input}

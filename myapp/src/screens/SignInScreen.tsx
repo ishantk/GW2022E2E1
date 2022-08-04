@@ -1,10 +1,24 @@
 import React, { useState } from 'react';
 import { Button, StyleSheet, TextInput, View, Text, TouchableOpacity } from'react-native';
+import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
 
 export default function SignInScreen({navigation}: any) {
 
   function signIn(){
+
+    console.log( "Email: "+email+" Password: "+password);
     
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+      console.log("User Logged In...."+user.uid);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log("Error Occurred...."+errorCode+" "+errorMessage);
+    });
   }
 
   function navigateToRegisterScreen(){

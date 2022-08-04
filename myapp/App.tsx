@@ -16,6 +16,8 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import ClassComponent from './src/tutorials/ClassComponent';
 import SignInScreen from './src/screens/SignInScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from './src/helper/Constants';
 
 // Install: 
 
@@ -78,6 +80,9 @@ const Tab = createMaterialTopTabNavigator();
 }*/
 
 export default function App() {
+
+  initializeApp(firebaseConfig);
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName='SignInScreen'>
