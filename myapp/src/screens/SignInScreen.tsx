@@ -13,6 +13,7 @@ export default function SignInScreen({navigation}: any) {
     .then((userCredential) => {
       const user = userCredential.user;
       console.log("User Logged In...."+user.uid);
+      navigation.navigate("HomeScreen");
     })
     .catch((error) => {
       const errorCode = error.code;

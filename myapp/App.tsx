@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import { StyleSheet, Text, View, Dimensions, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -18,6 +18,7 @@ import SignInScreen from './src/screens/SignInScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from './src/helper/Constants';
+import { getAuth } from 'firebase/auth';
 
 // Install: 
 
@@ -81,14 +82,80 @@ const Tab = createMaterialTopTabNavigator();
 
 export default function App() {
 
+  const [showSplash, setShowSplash] = useState(true);
+  const [loggedIn, setLoggedIn] = useState(false);
+
   initializeApp(firebaseConfig);
 
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='SignInScreen'>
-        <Stack.Screen name='SignInScreen' component={SignInScreen}/>
-        <Stack.Screen name='RegisterScreen' component={RegisterScreen}/>
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+  useEffect(
+    ()=>{
+
+      async function showSplashScreen() {
+        // Reference to Authentication Module
+        const auth = getAuth();
+        if(auth.currentUser != null){
+          console.log("User is already Registered or Logged In: "+auth.currentUser.uid);
+          setLoggedIn(true);
+        }else{
+          console.log("User is not Registered or Logged In");
+        }
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        console.log("Wait for 3 seconds over...");
+        setShowSplash(false);
+      }
+
+      try{
+        showSplashScreen();
+      }catch(error){
+        console.log("Something Went Wrong: "+error);
+      }finally{
+        console.log("Finally Executed..");
+      }
+
+    },
+      
+    []);
+
+    if(showSplash){
+      return (
+        <View style={styles.container}>
+          <Text>Phatak Status</Text>
+        </View>
+      );
+    }
+
+    if(loggedIn){
+      return (
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName='HomeScreen'>
+            <Stack.Screen name='SignInScreen' component={SignInScreen}/>
+            <Stack.Screen name='RegisterScreen' component={RegisterScreen}/>
+            <Stack.Screen name='HomeScreen' component={HomeScreen}/>
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
+    }else{
+      return (
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName='SignInScreen'>
+            <Stack.Screen name='SignInScreen' component={SignInScreen}/>
+            <Stack.Screen name='RegisterScreen' component={RegisterScreen}/>
+            <Stack.Screen name='HomeScreen' component={HomeScreen}/>
+          </Stack.Navigator>
+        </NavigationContainer>
+      );
+    }
+    
+  
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 12,
+    margin: 12
+  }
+});

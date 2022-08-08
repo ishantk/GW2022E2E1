@@ -26,7 +26,7 @@ export default function RegisterScreen({navigation}: any) {
       }
 
       setDoc(doc(db, "users", user.uid), docToInsert);
-
+      navigation.navigate("HomeScreen");
     })
     .catch((error) => {
       const errorCode = error.code;
