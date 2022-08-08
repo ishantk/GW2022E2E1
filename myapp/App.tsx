@@ -111,7 +111,6 @@ export default function App() {
       }finally{
         console.log("Finally Executed..");
       }
-
     },
       
     []);
@@ -145,8 +144,6 @@ export default function App() {
         </NavigationContainer>
       );
     }
-    
-  
 }
 
 const styles = StyleSheet.create({
