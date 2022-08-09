@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button, StyleSheet, TextInput, View, Text, TouchableOpacity } from'react-native';
 import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
 
+
 export default function SignInScreen({navigation}: any) {
 
   function signIn(){

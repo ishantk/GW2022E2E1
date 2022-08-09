@@ -18,7 +18,8 @@ import SignInScreen from './src/screens/SignInScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from './src/helper/Constants';
-import { getAuth } from 'firebase/auth';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { Appbar } from 'react-native-paper';
 
 // Install: 
 
@@ -80,7 +81,10 @@ const Tab = createMaterialTopTabNavigator();
   );
 }*/
 
-export default function App() {
+
+
+export default function App({navigation}: any) {
+
 
   const [showSplash, setShowSplash] = useState(true);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -89,8 +93,27 @@ export default function App() {
 
   useEffect(
     ()=>{
+      
+      const auth = getAuth();
+      
+      onAuthStateChanged(auth, (user) =>{
+        if(user != null){
+          setTimeout(()=>{
+            console.log("User is already Registered or Logged In: "+user.uid);
+            setLoggedIn(true);
+            setShowSplash(false);
+          }, 3000)
+        }else{
+          setTimeout(()=>{
+            console.log("User not Registered or Logged In");
+            setShowSplash(false);
+          }, 3000)
+        }
 
-      async function showSplashScreen() {
+        
+      });
+
+      /*async function showSplashScreen() {
         // Reference to Authentication Module
         const auth = getAuth();
         if(auth.currentUser != null){
@@ -110,7 +133,8 @@ export default function App() {
         console.log("Something Went Wrong: "+error);
       }finally{
         console.log("Finally Executed..");
-      }
+      }*/
+
     },
       
     []);
@@ -129,7 +153,21 @@ export default function App() {
           <Stack.Navigator initialRouteName='HomeScreen'>
             <Stack.Screen name='SignInScreen' component={SignInScreen}/>
             <Stack.Screen name='RegisterScreen' component={RegisterScreen}/>
-            <Stack.Screen name='HomeScreen' component={HomeScreen}/>
+            <Stack.Screen name='HomeScreen' component={HomeScreen} options={{
+              title: "PhatakApp",
+              headerRight: ()=>(
+                <Appbar.Action
+                // https://materialdesignicons.com/ (for icon names)
+                icon="logout"
+                onPress = {()=> {
+                  const auth = getAuth();
+                  auth.signOut();
+                  setLoggedIn(false)
+                  setShowSplash(true);
+                }}
+                />
+              )
+            }}/>
           </Stack.Navigator>
         </NavigationContainer>
       );
