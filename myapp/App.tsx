@@ -109,32 +109,7 @@ export default function App({navigation}: any) {
             setShowSplash(false);
           }, 3000)
         }
-
-        
       });
-
-      /*async function showSplashScreen() {
-        // Reference to Authentication Module
-        const auth = getAuth();
-        if(auth.currentUser != null){
-          console.log("User is already Registered or Logged In: "+auth.currentUser.uid);
-          setLoggedIn(true);
-        }else{
-          console.log("User is not Registered or Logged In");
-        }
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        console.log("Wait for 3 seconds over...");
-        setShowSplash(false);
-      }
-
-      try{
-        showSplashScreen();
-      }catch(error){
-        console.log("Something Went Wrong: "+error);
-      }finally{
-        console.log("Finally Executed..");
-      }*/
-
     },
       
     []);
@@ -145,6 +120,8 @@ export default function App({navigation}: any) {
           <Text>Phatak Status</Text>
         </View>
       );
+    }else{
+      
     }
 
     if(loggedIn){
