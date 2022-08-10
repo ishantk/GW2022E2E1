@@ -2,7 +2,6 @@ import React, { useEffect, useReducer, useState } from 'react';
 import { StyleSheet, Text, View, Dimensions, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import HomeScreen from './src/fucntional-comps/home';
 import ProfileScreen from './src/fucntional-comps/profile';
 import OrdersScreen from './src/fucntional-comps/orders';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -20,6 +19,7 @@ import { initializeApp } from "firebase/app";
 import { firebaseConfig } from './src/helper/Constants';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Appbar } from 'react-native-paper';
+import HomeScreen from './src/screens/HomeScreen';
 
 // Install: 
 
@@ -133,16 +133,29 @@ export default function App({navigation}: any) {
             <Stack.Screen name='HomeScreen' component={HomeScreen} options={{
               title: "PhatakApp",
               headerRight: ()=>(
-                <Appbar.Action
-                // https://materialdesignicons.com/ (for icon names)
-                icon="logout"
-                onPress = {()=> {
-                  const auth = getAuth();
-                  auth.signOut();
-                  setLoggedIn(false)
-                  setShowSplash(true);
-                }}
-                />
+
+                <Appbar.Header>
+                     <Appbar.Action
+                      // https://materialdesignicons.com/ (for icon names)
+                      icon="logout"
+                      onPress = {()=> {
+                        const auth = getAuth();
+                        auth.signOut();
+                        setLoggedIn(false)
+                        setShowSplash(true);
+                      }}
+                      />
+                      <Appbar.Action
+                      // https://materialdesignicons.com/ (for icon names)
+                      icon="map"
+                      onPress = {()=> {
+                       // Navigate to a Map Screen
+                       // And show the same data as Markers
+                       
+                      }}
+                      />
+                </Appbar.Header>
+
               )
             }}/>
           </Stack.Navigator>
