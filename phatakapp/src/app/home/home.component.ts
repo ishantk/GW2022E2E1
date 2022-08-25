@@ -1,6 +1,8 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, onSnapshot, setDoc } from '@angular/fire/firestore';
-import { FormGroup, FormControl } from '@angular/forms';
+import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, onSnapshot, setDoc, Timestamp } from '@angular/fire/firestore';
+import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { values } from 'cypress/types/lodash';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +21,8 @@ export class HomeComponent implements OnInit {
       longitude: new FormControl(''),
       phatakimage: new FormControl(''),
       phatakId: new FormControl(''),
+      status: new FormControl(1),
+      timings: new FormArray([])
     }
   ); 
 
@@ -43,45 +47,93 @@ export class HomeComponent implements OnInit {
     // })
   }
 
+  getTimingsArrayFromPhatakForm() {
+    return this.phatakForm.get('timings') as FormArray;
+  }
+
+  addTimingDetailsToArray() {
+    this.getTimingsArrayFromPhatakForm().push(new FormGroup({
+      time: new FormControl(null),
+      trafficStatus: new FormControl(''),
+      train: new FormControl('')
+    }))
+  }
+
+  removeTimingDetailsToArray(idx: number) {
+    this.getTimingsArrayFromPhatakForm().removeAt(idx);
+  }
+
   // Create Operation
   addPhatakToFirebase(){
     console.log("Function Add Executed");
-    console.log(this.phatakForm.value);
-    let value = {...this.phatakForm.value};
+    let value: any = {...this.phatakForm.value};
     
     // addDoc(collection(this.firestore, "phataks"), value)
-    
-    value['phatakId'] = value?.phatakId.length === 0 ? doc(collection(this.firestore, "phataks")).id : value.phatakId;
-    let docRef = doc(this.firestore, "phataks/" + value.phatakId)
-    setDoc(docRef, value)
+    let phatakInfo = {
+      phatakId: value?.phatakId.length === 0 ? doc(collection(this.firestore, "phataks")).id : value.phatakId,
+      location: [value.latitude, value.longitude],
+      phatakName: value.phatakname,
+      inchargeName: value.inchargename,
+      inchargePhone: value.inchargephone,
+      status: value.status,
+      timings: value.timings.map(e => ({
+        trafficStatus: e.trafficStatus,
+        train: e.train,
+        time: Timestamp.fromDate(new Date(e.time))
+      })),
+      phatakImage: value.phatakimage
+    }
+    let docRef = doc(this.firestore, "phataks/" + phatakInfo.phatakId)
+    setDoc(docRef, phatakInfo)
     .then(() => {
       console.log("Saved");
-      this.phatakForm.reset();
+      this.phatakForm.reset({});
       this.showForm = !this.showForm;
     }, (error) => {
       console.error(error);
       
     })
-
-    console.log(value);
-    
   }
 
   updatePhatak(phatak: any) {
     this.showForm = true;
-    this.phatakForm.setValue({
-      phatakname: phatak.phatakname,
-      inchargename: phatak.inchargename,
-      inchargephone: phatak.inchargephone,
-      latitude: phatak.latitude,
-      longitude: phatak.longitude,
-      phatakimage: phatak.phatakimage,
-      phatakId: phatak.phatakId
+    let datepipe = new DatePipe('en-US');
+    this.phatakForm = new FormGroup({
+      phatakname: new FormControl(phatak.phatakName),
+      inchargename: new FormControl(phatak.inchargeName),
+      inchargephone: new FormControl(phatak.inchargePhone),
+      latitude: new FormControl(phatak.location[0]),
+      longitude: new FormControl(phatak.location[1]),
+      phatakimage: new FormControl(phatak.phatakImage),
+      phatakId: new FormControl(phatak.phatakId),
+      status: new FormControl(phatak.status),
+      timings: new FormArray(phatak.timings.length === 0 ? [] : phatak.timings.map(element => new FormGroup({
+        time: new FormControl(datepipe.transform(element.time.toDate(), 'yyyy-MM-dd HH:mm')),
+        trafficStatus: new FormControl(element.trafficStatus),
+        train: new FormControl(element.train)
+      })))
     });
 
-    console.log(">>> Phatak Obj: ", phatak);
-    console.log(">>> Phatak Form: ", this.phatakForm.value);
-    
+
+    // this.phatakForm.patchValue({
+    //   phatakname: phatak.phatakName,
+    //   inchargename: phatak.inchargeName,
+    //   inchargephone: phatak.inchargePhone,
+    //   latitude: phatak.location[0],
+    //   longitude: phatak.location[1],
+    //   phatakimage: phatak.phatakImage,
+    //   phatakId: phatak.phatakId,
+    //   status: phatak.status,
+    // });
+
+    // phatak.timings.forEach(element => {
+    //   // console.log(element);
+    //   this.getTimingsArrayFromPhatakForm().push(new FormGroup({
+    //     time: new FormControl(datepipe.transform(element.time.toDate(), 'yyyy-MM-dd HH:mm')),
+    //     trafficStatus: new FormControl(element.trafficStatus),
+    //     train: new FormControl(element.train)
+    //   }))
+    // });
   }
 
   deletePhatak(phatakId: string) {

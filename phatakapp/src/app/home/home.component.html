@@ -25,10 +25,10 @@
     <tbody>
       <tr *ngFor="let phatak of phataksList; index as idx">
         <td>{{ idx + 1 }}</td>
-        <td>{{ phatak.phatakname }}</td>
-        <td>{{ phatak.inchargename }}</td>
-        <td>{{ phatak.inchargephone }}</td>
-        <td>[{{ phatak.longitude }}, {{phatak.latitude}}]</td>
+        <td>{{ phatak.phatakName }}</td>
+        <td>{{ phatak.inchargeName }}</td>
+        <td>{{ phatak.inchargePhone }}</td>
+        <td>{{ phatak.location }}</td>
         <td>
           <button type="button" class="btn btn-sm btn-primary mx-1" (click)="updatePhatak(phatak)">Update</button>
           <button type="button" class="btn btn-sm btn-danger mx-1" (click)="deletePhatak(phatak.id)">Delete</button>
@@ -38,7 +38,7 @@
   </table>
 </div>
 
-<div class="container mt-3" *ngIf="showForm">
+<div class="container mt-3 p-4" *ngIf="showForm">
   <h2>Add New Phatak</h2>
   <form [formGroup]="phatakForm" (ngSubmit)="addPhatakToFirebase()">
     <div class="mb-3 mt-3">
@@ -71,10 +71,34 @@
       <input type="file" class="form-control" id="phatakimage" name="phatakimage" formControlName="phatakimage">
     </div>
 
-    <button type="submit" class="btn btn-primary">Add Phatak</button>
-  </form>
-  
-  <p>FORM DATA</p>
-  <p>{{phatakForm.value | json}}</p>
+    <div class="row">
+      <div class="col-12">
+        <div class="d-flex justify-content-between">
+          <h5>Timings</h5>
+          <button type="button" class="btn btn-primary btn-sm" (click)="addTimingDetailsToArray()">Add Timing</button>
+        </div>
+      </div>
+      <div class="col-12 my-2" formArrayName="timings" *ngFor="let _ of getTimingsArrayFromPhatakForm().controls; index as idx">
+        <div [formGroupName]="idx" class="row">
+          <div class="col">
+            <label for="name">Train Name</label>
+            <input class="form-control" type="text" name="train" id="train" formControlName="train">
+          </div>
+          <div class="col">
+            <label for="trafficStatus">Traffic Status</label>
+            <input class="form-control" type="text" name="trafficStatus" id="trafficStatus" formControlName="trafficStatus">
+          </div>
+          <div class="col">
+            <label for="time">Time</label>
+            <input class="form-control" type="datetime-local" name="time" id="time" formControlName="time">
+          </div>
+          <button type="button" class="btn btn-sm btn-danger col mt-3" (click)="removeTimingDetailsToArray(idx)">Remove</button>
+          <!-- <div class="col d-flex justify-content-center align-items-center">
+          </div> -->
+        </div>
+      </div>
+    </div>
 
+    <button type="submit" class="btn btn-primary mt-3">Add Phatak</button>
+  </form>
 </div>
