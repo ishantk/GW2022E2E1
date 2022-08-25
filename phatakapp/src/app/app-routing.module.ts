@@ -1,15 +1,24 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PhatakComponent } from './phatak/phatak.component';
+import { AboutComponent } from './about/about.component';
+import { ContactusComponent } from './contactus/contactus.component';
+import { GalleryComponent } from './gallery/gallery.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-  {path:'phatak', component: PhatakComponent},
+  // { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '', component: HomeComponent, pathMatch: 'prefix' },
+  { path: 'about', component: AboutComponent },
+  { path: 'contact-us', component: ContactusComponent },
+  { path: 'gallery', component: GalleryComponent },
+  // { path: '**', redirectTo: '' }
+
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {})
+  ],
   exports: [RouterModule]
 })
-export class AppRoutingModule { 
- 
-}
+export class AppRoutingModule { }

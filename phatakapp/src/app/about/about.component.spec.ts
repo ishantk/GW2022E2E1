@@ -1,18 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PhatakComponent } from './phatak.component';
+import { AboutComponent } from './about.component';
 
-describe('PhatakComponent', () => {
-  let component: PhatakComponent;
-  let fixture: ComponentFixture<PhatakComponent>;
+describe('AboutComponent', () => {
+  let component: AboutComponent;
+  let fixture: ComponentFixture<AboutComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PhatakComponent ]
+      declarations: [ AboutComponent ]
     })
     .compileComponents();
+  });
 
-    fixture = TestBed.createComponent(PhatakComponent);
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AboutComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

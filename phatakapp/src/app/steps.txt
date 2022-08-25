@@ -1,0 +1,8 @@
+npm install --global firebase-tools
+firebase login
+
+npm install @angular/fire or ng add @angular/fire
+
+npm install @angular/fire --legacy-peer-deps
+or
+ng add @angular/fire --force

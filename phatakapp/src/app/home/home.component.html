@@ -1,0 +1,80 @@
+<div class="container mt-3">
+  <div class="mt-4 p-5 bg-primary text-white rounded">
+    <h1>Phatak Backend</h1> 
+    <p>You can easlily manage railway crossings form this backedn</p> 
+    <button type="button" class="btn btn-outline-light" (click)="showForm = !showForm">
+      {{ showForm ? 'Hide' : 'Show' }} Form
+    </button>
+  </div>
+</div>
+
+<div class="container mt-3" *ngIf="!showForm">
+  <h2>Phatak Lists</h2>
+  <!-- {{ phataksList | json }} -->
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Sr. No</th>
+        <th>Phatak Name</th>
+        <th>Incharge Name</th>
+        <th>Incharge Phone</th>
+        <th>Coordinates</th>
+        <th>Actiond</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let phatak of phataksList; index as idx">
+        <td>{{ idx + 1 }}</td>
+        <td>{{ phatak.phatakname }}</td>
+        <td>{{ phatak.inchargename }}</td>
+        <td>{{ phatak.inchargephone }}</td>
+        <td>[{{ phatak.longitude }}, {{phatak.latitude}}]</td>
+        <td>
+          <button type="button" class="btn btn-sm btn-primary mx-1" (click)="updatePhatak(phatak)">Update</button>
+          <button type="button" class="btn btn-sm btn-danger mx-1" (click)="deletePhatak(phatak.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="container mt-3" *ngIf="showForm">
+  <h2>Add New Phatak</h2>
+  <form [formGroup]="phatakForm" (ngSubmit)="addPhatakToFirebase()">
+    <div class="mb-3 mt-3">
+      <label for="phatakname">Enter Phatak Name:</label>
+      <input type="text" class="form-control" id="phatakname" placeholder="Enter Name" name="phatakname" formControlName="phatakname">
+    </div>
+    
+    <div class="mb-3 mt-3">
+      <label for="inchargename">Person In Charge Name:</label>
+      <input type="text" class="form-control" id="inchargename" placeholder="Enter Person In Charge" name="inchargename" formControlName="inchargename">
+    </div>
+
+    <div class="mb-3 mt-3">
+      <label for="inchargephone">Person In Charge Phone:</label>
+      <input type="text" class="form-control" id="name" placeholder="Enter Person In Charge Phone" name="inchargephone" formControlName="inchargephone">
+    </div>
+
+    <div class="mb-3 mt-3">
+      <label for="latitude">Phatak Latitude:</label>
+      <input type="text" class="form-control" id="latitude" placeholder="Enter Phatak Latitude" name="latitude" formControlName="latitude">
+    </div>
+
+    <div class="mb-3 mt-3">
+      <label for="longitude">Phatak Longitude:</label>
+      <input type="text" class="form-control" id="longitude" placeholder="Enter Phatak Longitude" name="longitude" formControlName="longitude">
+    </div>
+
+    <div class="mb-3 mt-3">
+      <label for="phatakimage">Select Phatak Image:</label>
+      <input type="file" class="form-control" id="phatakimage" name="phatakimage" formControlName="phatakimage">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Phatak</button>
+  </form>
+  
+  <p>FORM DATA</p>
+  <p>{{phatakForm.value | json}}</p>
+
+</div>
