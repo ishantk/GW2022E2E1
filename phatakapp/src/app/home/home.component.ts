@@ -1,7 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, onSnapshot, setDoc, Timestamp } from '@angular/fire/firestore';
+import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, onSnapshot, setDoc, Timestamp, GeoPoint } from '@angular/fire/firestore';
+import { Storage, ref, getDownloadURL } from '@angular/fire/storage';
 import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { uploadBytes } from '@firebase/storage';
 import { values } from 'cypress/types/lodash';
 
 @Component({
@@ -27,9 +29,11 @@ export class HomeComponent implements OnInit {
   ); 
 
   phataksList: any[] = [];
+  tempImage: any = null;
 
   constructor(
-    private firestore: Firestore
+    private firestore: Firestore,
+    private storage: Storage
   ) { }
 
   ngOnInit(): void {
@@ -63,14 +67,19 @@ export class HomeComponent implements OnInit {
     this.getTimingsArrayFromPhatakForm().removeAt(idx);
   }
 
+  selectImage(event) {
+    console.log(">>> Files: ", event.target.files);
+    this.tempImage = event.target.files[0]
+  }
+
   // Create Operation
-  addPhatakToFirebase(){
+  async addPhatakToFirebase(){
     console.log("Function Add Executed");
     let value: any = {...this.phatakForm.value};
     
     // addDoc(collection(this.firestore, "phataks"), value)
     let phatakInfo = {
-      phatakId: value?.phatakId.length === 0 ? doc(collection(this.firestore, "phataks")).id : value.phatakId,
+      phatakId: value?.phatakId?.length === 0 ? doc(collection(this.firestore, "phataks")).id : value.phatakId,
       location: [value.latitude, value.longitude],
       phatakName: value.phatakname,
       inchargeName: value.inchargename,
@@ -83,10 +92,19 @@ export class HomeComponent implements OnInit {
       })),
       phatakImage: value.phatakimage
     }
+
+    if(this.tempImage != null) {
+      let storageRef = ref(this.storage, "phataks/" + this.tempImage.name)
+      await uploadBytes(storageRef, this.tempImage);
+      phatakInfo.phatakImage = await getDownloadURL(storageRef);
+      alert(phatakInfo.phatakImage);
+    }
+
     let docRef = doc(this.firestore, "phataks/" + phatakInfo.phatakId)
     setDoc(docRef, phatakInfo)
     .then(() => {
-      console.log("Saved");
+      alert("Saved");
+      this.getTimingsArrayFromPhatakForm().clear();
       this.phatakForm.reset({});
       this.showForm = !this.showForm;
     }, (error) => {

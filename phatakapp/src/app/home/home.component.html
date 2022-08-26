@@ -25,7 +25,12 @@
     <tbody>
       <tr *ngFor="let phatak of phataksList; index as idx">
         <td>{{ idx + 1 }}</td>
-        <td>{{ phatak.phatakName }}</td>
+        <td>
+          <div class="d-flex gap-2">
+            <img [src]="phatak.phatakImage" alt="" class="img-fluid rounded" width="64px" height="64px">
+            <span>{{ phatak.phatakName }}</span>
+          </div>
+        </td>
         <td>{{ phatak.inchargeName }}</td>
         <td>{{ phatak.inchargePhone }}</td>
         <td>{{ phatak.location }}</td>
@@ -68,7 +73,8 @@
 
     <div class="mb-3 mt-3">
       <label for="phatakimage">Select Phatak Image:</label>
-      <input type="file" class="form-control" id="phatakimage" name="phatakimage" formControlName="phatakimage">
+      <input type="file" class="form-control" id="phatakimage" name="phatakimage" 
+        formControlName="phatakimage" accept="image/*" (change)="selectImage($event)">
     </div>
 
     <div class="row">
