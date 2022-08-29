@@ -48,7 +48,13 @@
   <form [formGroup]="phatakForm" (ngSubmit)="addPhatakToFirebase()">
     <div class="mb-3 mt-3">
       <label for="phatakname">Enter Phatak Name:</label>
-      <input type="text" class="form-control" id="phatakname" placeholder="Enter Name" name="phatakname" formControlName="phatakname">
+      <input type="text" class="form-control" id="phatakname" placeholder="Enter Name" name="phatakname" required formControlName="phatakname">
+      <span class="text-danger" *ngIf="phatakForm.get('phatakname')?.invalid && (phatakForm.get('phatakname').dirty || phatakForm.get('phatakname').touched)">
+        <div *ngIf="phatakForm.get('phatakname').hasError('required')">Phatak Name is Required</div>
+        <div *ngIf="phatakForm.get('phatakname').hasError('minlength')">Phatak Name should be greater than 5 characters</div>
+        <div *ngIf="phatakForm.get('phatakname').hasError('maxlength')">Phatak Name should be less than 5 characters</div>
+        <div *ngIf="phatakForm.get('phatakname').hasError('pattern')">Phatak Name should be in lower case</div>
+      </span>
     </div>
     
     <div class="mb-3 mt-3">
@@ -105,6 +111,6 @@
       </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-3">Add Phatak</button>
+    <button type="submit" class="btn btn-primary mt-3" [disabled]="phatakForm.invalid">Add Phatak</button>
   </form>
 </div>

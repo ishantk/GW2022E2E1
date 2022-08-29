@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { addDoc, collection, deleteDoc, doc, Firestore, getDocs, onSnapshot, setDoc, Timestamp, GeoPoint } from '@angular/fire/firestore';
 import { Storage, ref, getDownloadURL } from '@angular/fire/storage';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { uploadBytes } from '@firebase/storage';
 import { values } from 'cypress/types/lodash';
 
@@ -16,7 +16,12 @@ export class HomeComponent implements OnInit {
   showForm: boolean = false;
   phatakForm = new FormGroup(
     {
-      phatakname: new FormControl(''),
+      phatakname: new FormControl(null, [
+        Validators.required, 
+        Validators.minLength(5), 
+        Validators.maxLength(5),
+        Validators.pattern(/^[a-z]/g)
+      ]),
       inchargename: new FormControl(''),
       inchargephone: new FormControl(''),
       latitude: new FormControl(''),
@@ -77,6 +82,10 @@ export class HomeComponent implements OnInit {
     console.log("Function Add Executed");
     let value: any = {...this.phatakForm.value};
     
+    if(this.phatakForm.invalid) {
+      alert("Form is invalid")
+      return;
+    }
     // addDoc(collection(this.firestore, "phataks"), value)
     let phatakInfo = {
       phatakId: value?.phatakId?.length === 0 ? doc(collection(this.firestore, "phataks")).id : value.phatakId,
