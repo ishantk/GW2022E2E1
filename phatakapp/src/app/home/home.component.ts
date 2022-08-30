@@ -83,7 +83,8 @@ export class HomeComponent implements OnInit {
     let value: any = {...this.phatakForm.value};
     
     if(this.phatakForm.invalid) {
-      alert("Form is invalid")
+      // alert("Form is invalid")
+      this.phatakForm.markAllAsTouched();
       return;
     }
     // addDoc(collection(this.firestore, "phataks"), value)

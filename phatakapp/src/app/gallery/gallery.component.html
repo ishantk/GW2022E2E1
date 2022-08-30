@@ -1,1 +1,17 @@
 <p>gallery works!</p>
+<!-- {{ news | json }} -->
+
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-sm-6 col-md-4 mb-2" *ngFor="let item of news; index as idx">
+      <div class="card rounded">
+        <img [src]="item.urlToImage" alt="" class="card-img-top" height="128px">
+        <div class="card-body">
+          <h5 class="card-title">{{ item.title }}</h5>
+          <h6 class="card-subtitle mt-1">{{ item.author }}</h6>
+          <p class="card-text text-muted mt-4">{{ item.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

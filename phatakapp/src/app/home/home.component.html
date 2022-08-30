@@ -80,7 +80,7 @@
     <div class="mb-3 mt-3">
       <label for="phatakimage">Select Phatak Image:</label>
       <input type="file" class="form-control" id="phatakimage" name="phatakimage" 
-        formControlName="phatakimage" accept="image/*" (change)="selectImage($event)">
+        accept="image/*" (change)="selectImage($event)">
     </div>
 
     <div class="row">
@@ -111,6 +111,6 @@
       </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mt-3" [disabled]="phatakForm.invalid">Add Phatak</button>
+    <button type="submit" class="btn btn-primary mt-3">Add Phatak</button>
   </form>
 </div>
