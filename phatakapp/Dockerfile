@@ -17,7 +17,7 @@ RUN npm run build
 FROM nginx:latest
 
 # Copy the build output for nginx contents
-COPY --from=build /usr/local/app/dist/estore-user-app /usr/share/nginx/html
+COPY --from=build /usr/local/app/dist/phatakapp /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
